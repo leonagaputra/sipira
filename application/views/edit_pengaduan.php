@@ -43,6 +43,25 @@
                     </div>
                 </div>
                 <div class="form-group">
+                    <label>PIC OJK</label>                          
+                    <select id="pic_ojk" class="form-control" name="VPIC" <?php echo (isset($submitted) && $submitted == 1) ? "disabled" : ""; ?>>
+                      <option value="-" <?php echo ((isset($submitted) && $submitted == 1)&&($values['VPIC']=="-")) ? "selected" : ""; ?>>-</option>
+                      <?php
+                        foreach ($pics as $pic){
+                            //echo $values['VPIC']. " ". $pic->VEMAIL. "test";
+                            //echo "testing: " (((isset($submitted) && $submitted == 1)&&($values['VPIC']==".$pic->VEMAIL."))?"selected":"");
+                            echo "<option value='".$pic->VEMAIL."' ".((($values['VPIC']==$pic->VEMAIL))?"selected":"")." >".$pic->VNAMA."</option>";
+                        }
+                      ?>
+                      <!--<option value="PERBANKAN" <?php echo ((isset($submitted) && $submitted == 1)&&($values['VPIC']=="PERBANKAN")) ? "selected" : ""; ?>>PERBANKAN</option>
+                      <option value="ASURANSI" <?php echo ((isset($submitted) && $submitted == 1)&&($values['VTYPE']=="ASURANSI")) ? "selected" : ""; ?>>ASURANSI</option>
+                      <option value="PASAR MODAL" <?php echo ((isset($submitted) && $submitted == 1)&&($values['VTYPE']=="PASAR MODAL")) ? "selected" : ""; ?>>PASAR MODAL</option>
+                      <option value="DANA PENSIUN" <?php echo ((isset($submitted) && $submitted == 1)&&($values['VTYPE']=="DANA PENSIUN")) ? "selected" : ""; ?>>DANA PENSIUN</option>
+                      <option value="PEMBIAYAAN" <?php echo ((isset($submitted) && $submitted == 1)&&($values['VTYPE']=="PEMBIAYAAN")) ? "selected" : ""; ?>>PEMBIAYAAN</option>
+                      <option value="PERGADAIAN" <?php echo ((isset($submitted) && $submitted == 1)&&($values['VTYPE']=="PERGADAIAN")) ? "selected" : ""; ?>>PERGADAIAN</option> -->
+                    </select>                   
+                </div>
+                <div class="form-group">
                     <label>Sektor Industri Jasa Keuangan</label>                          
                     <select id="jenis_pengaduan" class="form-control" name="VTYPE" <?php echo (isset($submitted) && $submitted == 1) ? "disabled" : ""; ?>>
                       <option value="-" <?php echo ((isset($submitted) && $submitted == 1)&&($values['VTYPE']=="-")) ? "selected" : ""; ?>>-</option>

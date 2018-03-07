@@ -22,6 +22,7 @@ class Backend extends My_Controller {
         $this->load->model('pengaduan', 'pg');
         $this->load->model('survey', 'sv');
         $this->load->model('buku_nomor', 'bn');
+        $this->load->model('pegawai', 'pw');
         //$this->load->model('total_aset', 'ta');
         $this->load->library('excel_reader');
         //$this->load->library('session');
@@ -335,7 +336,8 @@ class Backend extends My_Controller {
         $data['VTELPENG'] = $this->security($this->input->post('VTELPENG', TRUE));
         $data['VMASALAH'] = $this->security($this->input->post('VMASALAH', TRUE));
         $data['VTANGGAPAN'] = $this->security($this->input->post('VTANGGAPAN', TRUE));
-        $data['VSARAN'] = $this->security($this->input->post('VSARAN', TRUE));       
+        $data['VSARAN'] = $this->security($this->input->post('VSARAN', TRUE)); 
+        $data['VPIC'] = $this->security($this->input->post('VPIC', TRUE)); 
         
         $data['VCREA'] = $_SESSION['VEMAILS'];
         $data['DCREA'] = date('Y-m-d H:i:s');
@@ -344,11 +346,12 @@ class Backend extends My_Controller {
         $vbtype = (isset($data['VTYPE']) && $data['VTYPE'] != "")?$data['VTYPE']:'-';
         //echo $vbtype;exit;
         if ($get = $this->gm->get('MSTIJK', array('VBTYPE' => $vbtype),FALSE, FALSE, NULL, NULL,'VNAMA')) {
-            //print_r($get);exit;
-                        
+            //print_r($get);exit;              
         }
         $this->data['list_ijk'] = $get;
         
+        $this->data['pics'] = $this->pw->get_data(array('VROLE' => 'EPK'));
+        //print_r($this->data['pics']);exit;
         if (isset($_POST['DTGLPENG'])) {
             $id = $this->gm->insert("hdrpengaduan", $data);
             //$this->do_upload($id);
@@ -434,7 +437,8 @@ class Backend extends My_Controller {
         $data['VTELPENG'] = $this->security($this->input->post('VTELPENG', TRUE));
         $data['VMASALAH'] = $this->security($this->input->post('VMASALAH', TRUE));
         $data['VTANGGAPAN'] = $this->security($this->input->post('VTANGGAPAN', TRUE));
-        $data['VSARAN'] = $this->security($this->input->post('VSARAN', TRUE));       
+        $data['VSARAN'] = $this->security($this->input->post('VSARAN', TRUE));    
+        $data['VPIC'] = $this->security($this->input->post('VPIC', TRUE)); 
         
         $data['VMODI'] = $_SESSION['VEMAILS'];
         $data['DMODI'] = date('Y-m-d H:i:s');
@@ -443,10 +447,10 @@ class Backend extends My_Controller {
         $vbtype = (isset($data['VTYPE']) && !empty($data['VTYPE']))?$data['VTYPE']:$values->VTYPE;
         //echo "aaa " . $vbtype. " bbb";exit;
         if ($get = $this->gm->get('MSTIJK', array('VBTYPE' => $vbtype),FALSE, FALSE, NULL, NULL,'VNAMA')) {
-            //print_r($get);exit;
-                        
+            //print_r($get);exit;                      
         }
         $this->data['list_ijk'] = $get;
+        $this->data['pics'] = $this->pw->get_data(array('VROLE' => 'EPK'));
         
         if (isset($_POST['DTGLPENG'])) {
             $this->gm->update_data("hdrpengaduan", $data, $idhdr);
