@@ -89,7 +89,7 @@
                 </div>
                 <div class="form-group">
                     <label>Perihal</label>
-                    <input type="text" value="<?php echo (isset($submitted) && $submitted == 1) ? $values['VPERIHAL'] : ""; ?>" maxlength="100" name="VPERIHAL" class="form-control" placeholder="Perihal Surat"  <?php echo (isset($submitted) && $submitted == 1) ? "disabled" : ""; ?>>                    
+                    <input type="text" value="<?php echo (isset($submitted) && $submitted == 1) ? $values['VPERIHAL'] : ""; ?>" maxlength="200" name="VPERIHAL" class="form-control" placeholder="Perihal Surat"  <?php echo (isset($submitted) && $submitted == 1) ? "disabled" : ""; ?>>                    
                 </div> 
                 <div class="form-group">
                     <label>Keterangan</label>
