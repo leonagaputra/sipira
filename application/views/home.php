@@ -634,6 +634,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 window.location = "edit_pengaduan/" + id;
             }
             
+            function edit_pengaduan_surat(id){
+                //alert(id);
+                window.location = "edit_pengaduan_surat/" + id;
+            }
+            
             function update_perusahaan(param){
                 //alert(param);
                 $.ajax({
@@ -1148,6 +1153,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 //CKEDITOR.replace('VKET');
                 $('#daterangepicker').daterangepicker();
                 $('#datepicker').datepicker({
+                    autoclose: true,
+                    format:"yyyy-mm-dd"
+                });
+                
+                $('.tanggal').datepicker({
                     autoclose: true,
                     format:"yyyy-mm-dd"
                 });

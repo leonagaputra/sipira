@@ -389,6 +389,75 @@ class Backend extends My_Controller {
         $this->load->view('home', $this->data);
     }
     
+    function input_pengaduan_surat() {
+        $data = array();
+        $data['DTGLSRT'] = $this->security($this->input->post('DTGLSRT', TRUE));
+        $data['DTGLRCV'] = $this->security($this->input->post('DTGLRCV', TRUE));
+        $data['VNAMA'] = $this->security($this->input->post('VNAMA', TRUE));
+        $data['VIDENTITAS'] = $this->security($this->input->post('VIDENTITAS', TRUE));
+        $data['VALAMAT'] = $this->security($this->input->post('VALAMAT', TRUE));        
+        $data['VTELEPON'] = $this->security($this->input->post('VTELEPON', TRUE));          
+        $data['VTYPE'] = $this->security($this->input->post('VTYPE', TRUE));           
+        $data['ID_MSTIJK'] = $this->security($this->input->post('ID_MSTIJK', TRUE));        
+        $data['VALAMATPENG'] = $this->security($this->input->post('VALAMATPENG', TRUE));
+        $data['VNAMAPENG'] = $this->security($this->input->post('VNAMAPENG', TRUE));
+        $data['VTELPENG'] = $this->security($this->input->post('VTELPENG', TRUE));        
+        $data['VMASALAH'] = $this->security($this->input->post('VMASALAH', TRUE));
+        $data['VTANGGAPAN'] = $this->security($this->input->post('VTANGGAPAN', TRUE));
+        $data['VSARAN'] = $this->security($this->input->post('VSARAN', TRUE)); 
+        $data['VPIC'] = $this->security($this->input->post('VPIC', TRUE)); 
+        $data['VSTATSRT'] = $this->security($this->input->post('VSTATSRT', TRUE)); 
+        $data['VSTATPRS'] = $this->security($this->input->post('VSTATPRS', TRUE)); 
+        
+        $data['VCREA'] = $_SESSION['VEMAILS'];
+        $data['DCREA'] = date('Y-m-d H:i:s');
+        //print_r($data);exit;
+        
+        $vbtype = (isset($data['VTYPE']) && $data['VTYPE'] != "")?$data['VTYPE']:'-';
+        //echo $vbtype;exit;
+        if ($get = $this->gm->get('MSTIJK', array('VBTYPE' => $vbtype),FALSE, FALSE, NULL, NULL,'VNAMA')) {
+            //print_r($get);exit;              
+        }
+        $this->data['list_ijk'] = $get;
+        
+        $this->data['list_stat'] = array(
+            (object)array("ID" => "0", "VNAMA" => "-"),
+            (object)array("ID" => "1", "VNAMA" => "ASLI"),
+            (object)array("ID" => "2", "VNAMA" => "TEMBUSAN")
+        );
+        
+        $this->data['list_proses'] = array(
+            (object)array("ID" => "0", "VNAMA" => "-"),
+            (object)array("ID" => "1", "VNAMA" => "PROSES"),
+            (object)array("ID" => "2", "VNAMA" => "SELESAI")
+        );
+
+        $this->data['pics'] = $this->pw->get_data(array('VROLE' => 'EPK'));
+        //print_r($this->data['pics']);exit;
+        if (isset($_POST['DTGLSRT'])) {
+            $id = $this->gm->insert("txnpengaduansurat", $data);
+            //$this->do_upload($id);
+            $this->data['submitted'] = 1;
+            $this->data['values'] = $data;
+        }
+        $this->data['VNAME'] = $_SESSION['VNAME'];
+        $this->data['VDEP'] = $_SESSION['VDEP'];
+        $this->data['VDIR'] = $_SESSION['VDIR'];
+        
+        $this->data['VCREA'] = $_SESSION['VEMAILS'];
+        $this->data['DCREA'] = date('Y-m-d H:i:s');
+        $this->data["today"] = date('Y-m-d'); 
+        
+
+        $this->_cek_user_login();
+       
+        $this->_get_backend_menu();
+
+        $this->data['backend_page'] = 'input_pengaduan_surat.php';
+
+        $this->load->view('home', $this->data);
+    }
+    
     function get_mstijk(){
         $data = array();
         $data['VBTYPE'] = $this->security($this->input->post('VBTYPE', TRUE));
@@ -417,6 +486,27 @@ class Backend extends My_Controller {
         $this->_get_backend_menu();
 //        print_r($this->data);exit;
         $this->data['backend_page'] = 'monitoring_pengaduan.php';
+        //print_r($this->data['menus']);exit;
+        //get_user_class 
+        $this->load->view('home', $this->data);
+    }
+    
+    function monitoring_pengaduan_surat(){
+        $this->_cek_user_login();
+
+        $this->data["role"] = $_SESSION['VROLE'];
+
+        if ($datas = $this->pg->get_pengaduan_tertulis()) {
+            $this->data['datas'] = $datas;
+        }
+        
+        //print_r($datas);exit;
+        //$this->data['backend_page'] = 'monitoring.php';
+        //cek user akses, jangan kasi cek hak akses, krn semua redirect ke sini jika tidak punya akses
+        //$this->cek_hak_akses($this->session->userdata('ID'), "index.php/backend/home");
+        $this->_get_backend_menu();
+//        print_r($this->data);exit;
+        $this->data['backend_page'] = 'monitoring_pengaduan_surat.php';
         //print_r($this->data['menus']);exit;
         //get_user_class 
         $this->load->view('home', $this->data);
@@ -479,6 +569,82 @@ class Backend extends My_Controller {
         $this->_get_backend_menu();
 
         $this->data['backend_page'] = 'edit_pengaduan.php';
+        $this->load->view('home', $this->data);
+    }
+    
+    function edit_pengaduan_surat($idhdr) {
+        $data = array();
+        
+        $data['DTGLSRT'] = $this->security($this->input->post('DTGLSRT', TRUE));
+        $data['DTGLRCV'] = $this->security($this->input->post('DTGLRCV', TRUE));
+        $data['VNAMA'] = $this->security($this->input->post('VNAMA', TRUE));
+        $data['VIDENTITAS'] = $this->security($this->input->post('VIDENTITAS', TRUE));
+        $data['VALAMAT'] = $this->security($this->input->post('VALAMAT', TRUE));        
+        $data['VTELEPON'] = $this->security($this->input->post('VTELEPON', TRUE));          
+        $data['VTYPE'] = $this->security($this->input->post('VTYPE', TRUE));           
+        $data['ID_MSTIJK'] = $this->security($this->input->post('ID_MSTIJK', TRUE));        
+        $data['VALAMATPENG'] = $this->security($this->input->post('VALAMATPENG', TRUE));
+        $data['VNAMAPENG'] = $this->security($this->input->post('VNAMAPENG', TRUE));
+        $data['VTELPENG'] = $this->security($this->input->post('VTELPENG', TRUE));        
+        $data['VMASALAH'] = $this->security($this->input->post('VMASALAH', TRUE));
+        $data['VTANGGAPAN'] = $this->security($this->input->post('VTANGGAPAN', TRUE));
+        $data['VSARAN'] = $this->security($this->input->post('VSARAN', TRUE)); 
+        $data['VPIC'] = $this->security($this->input->post('VPIC', TRUE)); 
+        $data['VSTATSRT'] = $this->security($this->input->post('VSTATSRT', TRUE)); 
+        $data['VSTATPRS'] = $this->security($this->input->post('VSTATPRS', TRUE)); 
+        
+        $data['VMODI'] = $_SESSION['VEMAILS'];
+        $data['DMODI'] = date('Y-m-d H:i:s');
+        //print_r($data);exit;
+        $values = $this->gm->get('txnpengaduansurat', array('ID' => $idhdr),TRUE);
+        $vbtype = (isset($data['VTYPE']) && !empty($data['VTYPE']))?$data['VTYPE']:$values->VTYPE;
+        //echo "aaa " . $vbtype. " bbb";exit;
+        if ($get = $this->gm->get('MSTIJK', array('VBTYPE' => $vbtype),FALSE, FALSE, NULL, NULL,'VNAMA')) {
+            //print_r($get);exit;                      
+        }
+        $this->data['list_ijk'] = $get;
+        
+        $this->data['list_stat'] = array(
+            (object)array("ID" => "0", "VNAMA" => "-"),
+            (object)array("ID" => "1", "VNAMA" => "ASLI"),
+            (object)array("ID" => "2", "VNAMA" => "TEMBUSAN")
+        );
+        
+        $this->data['list_proses'] = array(
+            (object)array("ID" => "0", "VNAMA" => "-"),
+            (object)array("ID" => "1", "VNAMA" => "PROSES"),
+            (object)array("ID" => "2", "VNAMA" => "SELESAI")
+        );
+        
+        $this->data['pics'] = $this->pw->get_data(array('VROLE' => 'EPK'));
+        
+        if (isset($_POST['DTGLSRT'])) {
+            $this->gm->update_data("txnpengaduansurat", $data, $idhdr);
+            //$this->do_upload($id);
+            $this->data['submitted'] = 1;
+            $this->data['values'] = $data;
+        } else {
+            //$values = array();
+            //$values = $this->gm->get('hdrpengaduan', array('ID' => $idhdr),TRUE);
+            //$this->data['submitted'] = 1;
+            //print_r($values);exit;
+            $this->data['values'] = (array)$values;
+        }
+        $this->data['VNAME'] = $_SESSION['VNAME'];
+        $this->data['VDEP'] = $_SESSION['VDEP'];
+        $this->data['VDIR'] = $_SESSION['VDIR'];
+        $this->data['ID'] = $idhdr;
+        
+        $this->data['VCREA'] = $_SESSION['VEMAILS'];
+        $this->data['DCREA'] = date('Y-m-d H:i:s');
+        $this->data["today"] = date('Y-m-d');
+        
+
+        $this->_cek_user_login();
+       
+        $this->_get_backend_menu();
+
+        $this->data['backend_page'] = 'edit_pengaduan_surat.php';
         $this->load->view('home', $this->data);
     }
     
