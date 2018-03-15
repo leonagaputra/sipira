@@ -29,9 +29,10 @@
                         <th>NOMOR</th>
                         <th>TGL SURAT</th>
                         <th>NAMA</th>
-                        <th>NO TELP</th>
+                        <!--<th>NO TELP</th>-->
                         <th>SEKTOR INDUSTRI JASA KEUANGAN</th>
                         <th>INDUSTRI JASA KEUANGAN</th>
+                        <th>MASALAH</th>
                         <th>SURAT</th>
                         <th>PROSES</th>
                     </tr>
@@ -46,9 +47,10 @@
                                 echo "<td>".$i."</td>";                           
                                 echo "<td>" . $data->DTGLSRT . "</td>";
                                 echo "<td>" . $data->VNAMA . "</td>";                            
-                                echo "<td>" . $data->VTELEPON . "</td>";
+                                //echo "<td>" . $data->VTELEPON . "</td>";
                                 echo "<td>" . $data->VTYPE . "</td>";    
                                 echo "<td>" . $data->VIJK . "</td>";
+                                echo "<td>" . $data->VMASALAH . "</td>";
                                 echo "<td>" . $data->VSTATSRT . "</td>";
                                 echo "<td>" . $data->VSTATPRS . "</td>";
                             echo "</tr>";
@@ -57,25 +59,11 @@
                     }
                     ?>
                 </tbody>
-                <!--<tfoot>
-                    <tr>
-                        <th>NOMOR</th>
-                        <th>JUDUL</th>
-                        <th>DESKRIPSI</th>
-                        <th>TIPE</th>
-                        <th>SATKER</th>
-                        <th>DHUK</th>
-                        <th>STATUS</th>
-                    </tr>
-                </tfoot>-->
+
             </table>
         </div>
         <!-- /.box-body -->
     </div>
-    <!--<a class="small-box-footer" href="#detail_modal" data-toggle="modal">More info <i class="fa fa-arrow-circle-right"></i></a>-->
-    <!-- /.row -->
-    <!-- Main row -->
-    <!-- Your Page Content Here -->
 
 </section>
 
@@ -88,17 +76,6 @@
                     <h4 class="modal-title" id="modal_title">Dokumen Pendukung</h4>
                 </div>
                 <div class="modal-body">
-                    <!--<div>                            
-                        <div id="modal_class" class="small-box bg-light-blue">
-                            <div class="inner">
-                                <h3 id="modal_titlesh">Bc</h3>
-                                <p id="modal_title2">Basic Finance</p>
-                            </div>
-                            <div class="icon">
-                                <i class="ion ion-ios-people"></i>
-                            </div>                            
-                        </div>   
-                    </div>-->   
 
                     <table id="detail_data" class="table table-bordered table-hover">
                         <thead>

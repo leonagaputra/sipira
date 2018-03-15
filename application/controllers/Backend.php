@@ -428,8 +428,9 @@ class Backend extends My_Controller {
         
         $this->data['list_proses'] = array(
             (object)array("ID" => "0", "VNAMA" => "-"),
-            (object)array("ID" => "1", "VNAMA" => "PROSES"),
-            (object)array("ID" => "2", "VNAMA" => "SELESAI")
+            (object)array("ID" => "1", "VNAMA" => "OPEN - SUDAH DIKLARIFIKASI"),
+            (object)array("ID" => "2", "VNAMA" => "OPEN - DITERUSKAN KE KANTOR PUSAT"),
+            (object)array("ID" => "3", "VNAMA" => "CLOSED - SELESAI")
         );
 
         $this->data['pics'] = $this->pw->get_data(array('VROLE' => 'EPK'));
@@ -612,8 +613,9 @@ class Backend extends My_Controller {
         
         $this->data['list_proses'] = array(
             (object)array("ID" => "0", "VNAMA" => "-"),
-            (object)array("ID" => "1", "VNAMA" => "PROSES"),
-            (object)array("ID" => "2", "VNAMA" => "SELESAI")
+            (object)array("ID" => "1", "VNAMA" => "OPEN - SUDAH DIKLARIFIKASI"),
+            (object)array("ID" => "2", "VNAMA" => "OPEN - DITERUSKAN KE KANTOR PUSAT"),
+            (object)array("ID" => "3", "VNAMA" => "CLOSED - SELESAI")
         );
         
         $this->data['pics'] = $this->pw->get_data(array('VROLE' => 'EPK'));

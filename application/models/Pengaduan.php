@@ -29,9 +29,9 @@ class Pengaduan extends CI_Model {
     }
     
     public function get_pengaduan_tertulis() {
-        $this->db->select("h.ID, h.DTGLSRT, h.VNAMA, h.VTELEPON, h.VTYPE, m.VNAMA VIJK, "
+        $this->db->select("h.ID, h.DTGLSRT, h.VNAMA, h.VTELEPON, h.VTYPE, m.VNAMA VIJK,VMASALAH, "
                 . "IF(VSTATSRT=1,'ASLI',IF(VSTATSRT=2,'TEMBUSAN','NA')) AS VSTATSRT, "
-                . "IF(VSTATPRS=1,'PROSES',IF(VSTATPRS=2,'SELESAI','NA')) AS VSTATPRS, ");        
+                . "IF(VSTATPRS=1,'OPEN - SUDAH DIKLARIFIKASI',IF(VSTATPRS=2,'OPEN - DITERUSKAN KE KANTOR PUSAT',IF(VSTATPRS=3,'CLOSED - SELESAI','NA'))) AS VSTATPRS, ");        
         $this->db->from($this->table_tertulis. " h");
             $this->db->join('mstijk m', 'h.ID_MSTIJK = m.ID');            
         //$this->db->where('h.ID', $id);
