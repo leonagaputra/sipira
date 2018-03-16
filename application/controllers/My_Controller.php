@@ -54,6 +54,34 @@ class My_Controller extends CI_Controller {
         $this->output->set_header('Content-type: application/json');
         $this->output->set_output(json_encode($array));
     }
+    
+    function _clean_data(&$str) {
+        $str = preg_replace("/\t/", "\\t", $str);
+        $str = preg_replace("/\r?\n/", "\\n", $str);
+    }
+
+    function download_excel($datas){
+        //print_r($datas);exit;
+        $filename = "buku nomor " . date('Ymd') . ".xls";
+        header("Content-Disposition: attachment; filename=\"$filename\"");
+        header("Content-Type: application/vnd.ms-excel");
+                
+        if(!$datas){
+            echo "KOSONG";exit;
+        }       
+
+        $flag = false;
+        foreach ($datas as $row) {
+            //print_r((array)$row);exit;
+            if (!$flag) {
+                // display field/column names as first row
+                echo implode("\t", array_keys((array)$row)) . "\r\n";
+                $flag = true;
+            }
+            echo implode("\t", array_values((array)$row)) . "\r\n";
+        }
+        exit;
+    }
 
     function download_file($fullPath) {
         // Must be fresh start

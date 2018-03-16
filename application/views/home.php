@@ -639,6 +639,16 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 window.location = "edit_pengaduan_surat/" + id;
             }
             
+            function download_buku_nomor(no){
+                //alert(id);
+                var id_surat = $("#ID_SURAT").val();
+                var id_jabatan = $("#ID_JABATAN").val();
+                var iyear = $("#IYEAR").val();
+                if(no != 1)
+                    window.location = "download_buku_nomor/" + id_surat + "/"+ id_jabatan + "/"+ iyear;
+                else window.location = "download_buku_nomor/";
+            }
+            
             function update_perusahaan(param){
                 //alert(param);
                 $.ajax({

@@ -59,8 +59,10 @@
                     </select>                   
                 </div>
                 <div class="box-footer">                  
-                    <a type="button" href="<?php echo $base_url; ?>index.php/backend/buku_nomor" class="btn btn-primary" <?php echo (isset($submitted) && $submitted == 1) ? "" : "disabled"; ?>>New Search</a>
+                    <a type="button" href="<?php echo $base_url; ?>index.php/backend/buku_nomor" class="btn btn-primary" <?php echo (isset($submitted) && $submitted == 1) ? "" : "style='display:none;'"; ?>>New Search</a>
                     <input type="submit" name="submit" class="btn btn-primary" value="Search" <?php echo (isset($submitted) && $submitted == 1) ? "disabled" : ""; ?>/>
+                    <a type="button" href="javascript:download_buku_nomor(1);" class="btn btn-primary" >Download All To Excel</a>
+                    <a type="button" href="javascript:download_buku_nomor();" class="btn btn-primary" <?php echo (isset($submitted) && $submitted == 1) ? "" : "style='display:none'"; ?>>Download Result To Excel</a>
                 </div>
             </form>
         </div>

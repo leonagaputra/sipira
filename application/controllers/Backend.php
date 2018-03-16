@@ -834,6 +834,42 @@ class Backend extends My_Controller {
         $this->load->view('home', $this->data);
     }
     
+    function download_buku_nomor($id_surat = NULL, $id_jabatan = NULL, $iyear = NULL){
+        $data = array();
+//        $data['ID_SURAT'] = $this->security($this->input->post('ID_SURAT', TRUE));
+//        $data['ID_JABATAN'] = $this->security($this->input->post('ID_JABATAN', TRUE));
+//        $data['IYEAR'] = $this->security($this->input->post('IYEAR', TRUE));
+        
+        $data['ID_SURAT'] = $id_surat;
+        $data['ID_JABATAN'] = $id_jabatan;
+        $data['IYEAR'] = $iyear;
+        $where = array();
+        if ($data['ID_SURAT'] != NULL) {
+            $this->data['submitted'] = 1;   
+            $where = array(
+                'ID_JABATAN' => $data['ID_JABATAN'],
+                'ID_SURAT' => $data['ID_SURAT'],
+                'IYEAR' => $data['IYEAR']
+            );
+        }
+        
+        
+        $result = array();
+        $result = $this->bn->get_data_download($where);
+        $this->data['values'] = (array) $data;
+        $this->data['datas'] = $result;
+        
+        $this->_cek_user_login();
+        $this->data["role"] = $_SESSION['VROLE'];      
+        $this->data['kode'] = $this->gm->get('mstkodejabatan');
+        $this->data['tipe'] = $this->gm->get('mstkodesurat', NULL, FALSE, FALSE, NULL, NULL, 'VDESC');
+        //print_r($this->data['kode']);exit;
+        $this->_get_backend_menu();
+        $this->data['backend_page'] = 'buku_nomor.php';
+        //$this->load->view('home', $this->data);
+        $this->download_excel($result);
+    }
+    
     function input_buku_nomor(){
         $data = array();
         $data['ID_SURAT'] = $this->security($this->input->post('ID_SURAT', TRUE));

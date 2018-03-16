@@ -37,4 +37,32 @@ class Buku_nomor extends CI_Model {
         }
         return FALSE;
     }
+    
+    public function get_data_download($where = NULL, $start = NULL, $end = NULL) {       
+        $this->db->select("t.IYEAR,t.DDATE, s.VKODE, k.VKODE AS KODE_JABATAN, t.INOMOR, t.VPERIHAL, t.VKETERANGAN, t.VCREA");        
+        $this->db->from($this->table. " t");
+            $this->db->join('mstkodejabatan k', 't.ID_JABATAN = k.ID');    
+            $this->db->join('mstkodesurat s', 't.ID_SURAT = s.ID'); 
+        if($where != NULL)
+        {
+            foreach($where as $key=>$val)
+            {
+                $this->db->where($key, $val);
+            }
+        }
+        //$this->db->where("h.HDRSETTING = 'VALSURVEY'");
+        //$this->db->where("t.DDATE BETWEEN '" . $start. " 00:00:00' AND '".$end." 23:59:59'");
+        //$this->db->group_by($column);
+        //if($$where != NULL)
+        $this->db->order_by("t.IYEAR,s.VKODE,KODE_JABATAN,t.INOMOR", "asc");
+        if($query = $this->db->get())
+        {
+//            echo $this->db->last_query();exit;
+            if($query->num_rows() > 0)
+            {                
+                return $query->result();
+            }
+        }
+        return FALSE;
+    }
 }
