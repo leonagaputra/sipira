@@ -51,7 +51,7 @@ class Hak_akses extends CI_Model {
             $this->db->join("MSTUSERROLES ur", 'ur.VROLE = r.VROLE');
             $this->db->join("MSTUSERS u", 'u.VEMAILS = ur.VEMAILS');
         $this->db->where("u.VEMAILS", $user_id);
-        $this->db->order_by("m.IORDER ASC");
+        $this->db->order_by("m.VPARENTMNU,m.IORDER ASC");
         $this->db->group_by("m.VMENUS");
         if($query = $this->db->get())
         {
@@ -73,7 +73,7 @@ class Hak_akses extends CI_Model {
             $this->db->join("MSTUSERS u", 'u.VEMAILS = ur.VEMAILS');
         $this->db->where("u.VEMAILS", $user_id);
         $this->db->group_by("m.VPARENTMNU");
-        $this->db->order_by("m.IORDER ASC");
+        $this->db->order_by("m.VPARENTMNU,m.IORDER ASC");
         if($query = $this->db->get())
         {
             //echo $this->db->last_query();exit;

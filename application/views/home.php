@@ -1135,6 +1135,28 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     }
                 });
             }
+            
+            function input_penilaian_thos(){
+                //alert($("#IYEAR").val());
+                //var id_surat = $("#ID_SURAT").val();
+                var tahun = $("#IYEAR").val();
+                var semester = $("#ISEMESTER").val();
+                var url = main.base_url + "index.php/backend/input_penilaian_thos/" + tahun + "/" + semester;
+                //alert(url);
+                window.location.href = url;
+            }
+            
+            function show_penilaian_thos(thos_id, tahun, semester){               
+                var url = main.base_url + "index.php/backend/show_penilaian_thos/" + thos_id + "/" + tahun + "/" + semester;
+                //alert(url);
+                window.location.href = url;
+            }
+            
+            function show_rekap_penilaian_thos(thos_id, tahun, semester){               
+                var url = main.base_url + "index.php/backend/show_rekap_penilaian_thos/" + thos_id + "/" + tahun + "/" + semester;
+                //alert(url);
+                window.location.href = url;
+            }
 
             $(document).ready(function () {
                 $("#example2").DataTable();

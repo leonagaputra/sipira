@@ -22,6 +22,7 @@ class Backend extends My_Controller {
         $this->load->model('pengaduan', 'pg');
         $this->load->model('survey', 'sv');
         $this->load->model('buku_nomor', 'bn');
+        $this->load->model('penilaian_thos', 'pt');
         $this->load->model('pegawai', 'pw');
         //$this->load->model('total_aset', 'ta');
         $this->load->library('excel_reader');
@@ -914,4 +915,190 @@ class Backend extends My_Controller {
         $this->load->view('home', $this->data);
     }
     
+    function penilaian_thos(){
+        //echo "halo";exit;
+        $data = array();
+        $data['IYEAR'] = $this->security($this->input->post('IYEAR', TRUE));
+        $data['ISEMESTER'] = $this->security($this->input->post('ISEMESTER', TRUE));
+        $data['VCREA'] = $_SESSION['VEMAILS'];
+        //$data['IYEAR'] = $this->security($this->input->post('IYEAR', TRUE));
+        
+        if (isset($_POST['IYEAR'])) {
+            //$id = $this->gm->insert("hdrpengaduan", $data);
+            //get number
+            $where = array(
+                'IYEAR' => $data['IYEAR'],
+                'ISEMESTER' => $data['ISEMESTER'],
+                'VCREA' => $data['VCREA']
+            );
+            $result = array();
+            $result = $this->pt->get_nilai_by_user($data['IYEAR'],$data['ISEMESTER'], $data['VCREA']);   
+            //print_r($result);exit;
+            //$id = $this->gm->insert("txnbukunomor", $data);
+            //print_r($data);exit;
+            $this->data['submitted'] = 1;
+            $this->data['values'] = (array)$data;
+            $this->data['datas'] = $result;
+            //print_r($this->data['values']);exit;      
+        }
+        
+        $this->_cek_user_login();
+        $this->data["role"] = $_SESSION['VROLE'];      
+        $this->data['kode'] = $this->gm->get('mstkodejabatan');
+        $this->data['tipe'] = $this->gm->get('mstkodesurat', NULL, FALSE, FALSE, NULL, NULL, 'VDESC');
+        //print_r($this->data['kode']);exit;
+        $this->_get_backend_menu();
+        $this->data['backend_page'] = 'thos/penilaian_thos.php';
+        $this->load->view('home', $this->data);
+    }
+    
+    function input_penilaian_thos($IYEAR = FALSE, $ISEMESTER = FALSE){
+        $data = array();
+//        $data['IYEAR'] = $IYEAR;
+//        $data['ISEMESTER'] = $ISEMESTER;
+        $data['IYEAR'] = $IYEAR ? $IYEAR : $this->security($this->input->post('IYEAR', TRUE));
+        $data['ISEMESTER'] = $ISEMESTER ? $ISEMESTER : $this->security($this->input->post('ISEMESTER', TRUE));;
+        $data['ID_MSTTHOS'] = $this->security($this->input->post('ID_MSTTHOS', TRUE)); 
+        $DTL_ID = $this->security($this->input->post('DTL_ID', TRUE)); 
+        $DTL_NILAI = $this->security($this->input->post('DTL_NILAI', TRUE)); 
+        $data['VCREA'] = $_SESSION['VEMAILS'];
+        $data['DCREA'] = date('Y-m-d H:i:s'); 
+        $this->data['submitted'] = 0;
+        //print_r($data);exit;
+        if (isset($_POST['ID_MSTTHOS'])) {//echo"test";exit;
+            //insert header
+            $id = $this->gm->insert("hdrnilaithos", $data);         
+            
+            //insert detail
+            //loop
+            //print_r($DTL_ID);exit;
+            $detail = [];
+            $nilai_sum = 0;
+            for($i=0; $i<count($DTL_ID); $i++){
+                $detail['ID_HDRNILAITHOS'] = $id;
+                $detail['ID_MSTKOMP'] = $DTL_ID[$i];
+                $detail['DNILAI'] = $DTL_NILAI[$i];
+                $nilai_sum += $DTL_NILAI[$i];
+                $detail['VCREA'] = $data['VCREA'];
+                $detail['DCREA'] = $data['DCREA']; 
+                //insert
+                $this->gm->insert("dtlnilaithos", $detail); 
+                $detail = [];
+            }
+            $avg = $nilai_sum / $i;   
+            $avg = number_format($avg, 2);
+            //update rata2
+            $where = array(
+                'ID' => $id
+            );
+            $update = [];
+            $update['DNILAI'] = $avg;
+            $this->gm->update_data("hdrnilaithos", $update, NULL, $where);
+            
+            $this->data['submitted'] = 1;
+            $this->data['values'] = (array)$data;
+            //print_r($this->data['values']);exit;            
+        }
+        $this->_cek_user_login();
+        $this->data["role"] = $_SESSION['VROLE']; 
+        $this->data["IYEAR"] = $data['IYEAR'];
+        $this->data["ISEMESTER"] = $data['ISEMESTER'];
+        if($this->data['submitted'] != 1)
+            $this->data["list_thos"] = $this->pt->get_thos($data['IYEAR'], $data['ISEMESTER'], $data['VCREA']);
+        else
+            $this->data["list_thos"] = $this->pt->get_thos();
+        $this->data["dtlnilaithos"] = $this->pt->get_komponen_nilai();
+        $this->data["today"] = date('Y-m-d');
+        $this->_get_backend_menu();
+        $this->data['backend_page'] = 'thos/input_penilaian_thos.php';
+        $this->load->view('home', $this->data);
+    }
+    
+    function show_penilaian_thos($ID_MSTTHOS = FALSE, $IYEAR = FALSE, $ISEMESTER = FALSE){
+        $data = array();
+//        $data['IYEAR'] = $IYEAR;
+//        $data['ISEMESTER'] = $ISEMESTER;
+        $data['IYEAR'] = $IYEAR ? $IYEAR : $this->security($this->input->post('IYEAR', TRUE));
+        $data['ISEMESTER'] = $ISEMESTER ? $ISEMESTER : $this->security($this->input->post('ISEMESTER', TRUE));;
+        $data['ID_MSTTHOS'] = $ID_MSTTHOS ? $ID_MSTTHOS : $this->security($this->input->post('ID_MSTTHOS', TRUE)); 
+        
+        $data['VCREA'] = $_SESSION['VEMAILS'];
+        $data['DCREA'] = date('Y-m-d H:i:s'); 
+        $this->data['submitted'] = 1;
+        //print_r($data);exit;
+        
+        $this->_cek_user_login();
+        $this->data["role"] = $_SESSION['VROLE']; 
+        $this->data["IYEAR"] = $data['IYEAR'];
+        $this->data["ISEMESTER"] = $data['ISEMESTER'];
+        $this->data["ID_MSTTHOS"] = $data['ID_MSTTHOS'];
+        $this->data["list_thos"] = $this->pt->get_thos();
+        //$this->data["dtlnilaithos"] = $this->pt->get_komponen_nilai();
+        $this->data["dtlnilaithos"] = $this->pt->get_nilai_by_id($data['IYEAR'],$data['ISEMESTER'], $data['VCREA'], $data['ID_MSTTHOS']);
+        
+        //$this->data["dtlnilaithos"] = $this->pt->get_komponen_nilai();
+        $this->data["today"] = date('Y-m-d');
+        $this->_get_backend_menu();
+        $this->data['backend_page'] = 'thos/show_penilaian_thos.php';
+        $this->load->view('home', $this->data);
+    }
+    
+    function rekap_penilaian_thos(){
+        $data = array();
+        $data['IYEAR'] = $this->security($this->input->post('IYEAR', TRUE));
+        $data['ISEMESTER'] = $this->security($this->input->post('ISEMESTER', TRUE));
+        $data['VCREA'] = $_SESSION['VEMAILS'];
+      
+        if (isset($_POST['IYEAR'])) {
+            $where = array(
+                'IYEAR' => $data['IYEAR'],
+                'ISEMESTER' => $data['ISEMESTER'],
+                'VCREA' => $data['VCREA']
+            );
+            $result = array();
+            $result = $this->pt->get_nilai_rekap($data['IYEAR'],$data['ISEMESTER']);   
+
+            $this->data['submitted'] = 1;
+            $this->data['values'] = (array)$data;
+            $this->data['datas'] = $result; 
+        }
+        
+        $this->_cek_user_login();
+        $this->data["role"] = $_SESSION['VROLE'];      
+        $this->data['kode'] = $this->gm->get('mstkodejabatan');
+        $this->data['tipe'] = $this->gm->get('mstkodesurat', NULL, FALSE, FALSE, NULL, NULL, 'VDESC');
+        //print_r($this->data['kode']);exit;
+        $this->_get_backend_menu();
+        $this->data['backend_page'] = 'thos/rekap_penilaian_thos.php';
+        $this->load->view('home', $this->data);
+    }
+    
+    function show_rekap_penilaian_thos($ID_MSTTHOS = FALSE, $IYEAR = FALSE, $ISEMESTER = FALSE){
+        $data = array();
+//        $data['IYEAR'] = $IYEAR;
+//        $data['ISEMESTER'] = $ISEMESTER;
+        $data['IYEAR'] = $IYEAR ? $IYEAR : $this->security($this->input->post('IYEAR', TRUE));
+        $data['ISEMESTER'] = $ISEMESTER ? $ISEMESTER : $this->security($this->input->post('ISEMESTER', TRUE));;
+        $data['ID_MSTTHOS'] = $ID_MSTTHOS ? $ID_MSTTHOS : $this->security($this->input->post('ID_MSTTHOS', TRUE)); 
+        
+        $data['VCREA'] = $_SESSION['VEMAILS'];
+        $data['DCREA'] = date('Y-m-d H:i:s'); 
+        $this->data['submitted'] = 1;
+        //print_r($data);exit;
+        
+        $this->_cek_user_login();
+        $this->data["role"] = $_SESSION['VROLE']; 
+        $this->data["IYEAR"] = $data['IYEAR'];
+        $this->data["ISEMESTER"] = $data['ISEMESTER'];
+        $this->data["ID_MSTTHOS"] = $data['ID_MSTTHOS'];
+        $this->data["list_thos"] = $this->pt->get_thos();
+        //$this->data["dtlnilaithos"] = $this->pt->get_komponen_nilai();
+        $this->data["dtlnilaithos"] = $this->pt->get_rekap_nilai_by_id($data['IYEAR'],$data['ISEMESTER'], $data['VCREA'], $data['ID_MSTTHOS']);
+        
+        //$this->data["dtlnilaithos"] = $this->pt->get_komponen_nilai();
+        $this->data["today"] = date('Y-m-d');
+        $this->_get_backend_menu();
+        $this->data['backend_page'] = 'thos/show_rekap_penilaian_thos.php';
+        $this->load->view('home', $this->data);
+    }
 }
