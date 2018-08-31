@@ -47,9 +47,9 @@
                     </select>                   
                 </div>               
                 <div class="box-footer">                  
-                    <!--<a type="button" href="<?php echo $base_url; ?>index.php/backend/penilaian_thos" class="btn btn-primary" <?php echo (isset($submitted) && $submitted == 1) ? "" : "style='display:none;'"; ?>>New Search</a> -->
+                    <a type="button" href="<?php echo $base_url; ?>index.php/backend/rekap_penilaian_thos" class="btn btn-primary" <?php echo (isset($submitted) && $submitted == 1) ? "" : "style='display:none;'"; ?>>New Search</a> 
                     <input type="submit" name="submit" class="btn btn-primary" value="Search" <?php echo (isset($submitted) && $submitted == 1) ? "disabled" : ""; ?>/>                    
-                    <a type="button" href="javascript:input_penilaian_thos();" class="btn btn-primary" >Add New</a>
+                    <!--<a type="button" href="javascript:input_penilaian_thos();" class="btn btn-primary" >Add New</a>-->
                 </div>
             </form>
         </div>
