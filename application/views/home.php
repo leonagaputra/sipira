@@ -639,6 +639,16 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 window.location = "edit_pengaduan_surat/" + id;
             }
             
+            function edit_perijinan(id, menu, id_kategori){
+                //alert(id);
+                window.location = "edit_perijinan/" + id + "/" + menu + "/0/0/" + id_kategori;
+            }
+            
+            function view_perijinan(id, menu){
+                //alert(id);
+                window.location = "view_perijinan/" + id + "/" + menu;
+            }
+            
             function download_buku_nomor(no){
                 //alert(id);
                 var id_surat = $("#ID_SURAT").val();
