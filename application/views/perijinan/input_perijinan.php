@@ -125,7 +125,7 @@
                       <option value="KCP" <?php echo ((isset($submitted) && $submitted == 1)&&($values['VTIPEKANTOR']=="KCP")) ? "selected" : ""; ?>>KANTOR CABANG PEMBANTU</option>
                       <option value="KK" <?php echo ((isset($submitted) && $submitted == 1)&&($values['VTIPEKANTOR']=="KK")) ? "selected" : ""; ?>>KANTOR KAS</option>
                       <option value="FPT" <?php echo ((isset($submitted) && $submitted == 1)&&($values['VTIPEKANTOR']=="FPT")) ? "selected" : ""; ?>>FIT AND PROPER</option>
-                      <option value="FPT" <?php echo ((isset($submitted) && $submitted == 1)&&($values['VTIPEKANTOR']=="MOD")) ? "selected" : ""; ?>>PERMODALAN</option>
+                      <option value="MOD" <?php echo ((isset($submitted) && $submitted == 1)&&($values['VTIPEKANTOR']=="MOD")) ? "selected" : ""; ?>>PERMODALAN</option>
                     </select>                   
                 </div>              
                 

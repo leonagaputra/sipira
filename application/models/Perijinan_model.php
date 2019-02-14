@@ -68,10 +68,10 @@ class Perijinan_model extends CI_Model {
 //        if($where_in != NULL){
 //            $this->db->where_in($where_in, $wherein_val);
 //        }
-        $this->db->order_by("m.DCREA", "asc");
+        $this->db->order_by("m.ID", "asc");
         if($query = $this->db->get())
         {
-//            echo $this->db->last_query();exit;
+            //echo $this->db->last_query();exit;
             if($query->num_rows() > 0)
             {                          
                 return $query->result();

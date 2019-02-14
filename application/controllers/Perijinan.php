@@ -315,19 +315,22 @@ class Perijinan extends My_Controller {
             );
             $result = array();
             //$result = $this->gm->get("hdrperijinan",$where, FALSE, FALSE, NULL, NULL, "DTGLTERIMA", TRUE); 
-            $result = $this->ij->get_monitoring($where, "VSTAT", $where_in);
+            //$result = $this->ij->get_monitoring($where, "VSTAT", $where_in);
             
             $currdate = date('Y-m-d');
             if($result = $this->ij->get_monitoring($where, "VSTAT", $where_in)){
                 foreach($result as $res){
-                    $hari = $this->get_working_days($currdate, $res->DDEADLINE, array());
-                    //echo $hari;exit;
-                    if($res->VSTATS == 6 || $res->VSTATS == 8 || $res->VSTATS == 7 || $res->VSTATS == 5)$res->COLOR = "bg-green";
-                    else if($hari <= 0) $res->COLOR = "bg-red";
-                    else if($hari < 5)  $res->COLOR = "bg-purple";
-                    else if($hari < 10) $res->COLOR = "bg-yellow";
-                    else $res->COLOR = "";
-
+                    $res->COLOR = "";
+                    if($res->DDEADLINE){
+                        $hari = $this->get_working_days($currdate, $res->DDEADLINE, array());
+                        //echo $hari;exit;
+                        if($res->VSTATS == 6 || $res->VSTATS == 8 || $res->VSTATS == 7 || $res->VSTATS == 5)$res->COLOR = "bg-green";
+                        else if($hari <= 0) $res->COLOR = "bg-red";
+                        else if($hari < 5)  $res->COLOR = "bg-purple";
+                        else if($hari < 10) $res->COLOR = "bg-yellow";
+                        else $res->COLOR = "";
+                    } 
+                    
                 }
             }
             
@@ -514,6 +517,65 @@ class Perijinan extends My_Controller {
         $this->_get_backend_menu();
         $this->data['backend_page'] = 'perijinan/edit_perijinan.php';
         $this->load->view('home', $this->data);
+    }
+    
+    function sendmail2(){
+        $to = "leo.naga@ojk.go.id";
+        $subject = "Test Email";
+        $body = "This is only a test.";
+        $headers = "From: leo.nagaputra@gmail.com\r\n".
+                "Reply-To: leo.nagaputra@gmail.com\r\n";
+        $cc = null;
+        $bcc = null;
+        $return_path = "leo.nagaputra@gmail.com";
+//echo "here1";exit;
+        //imap_mail($to, $subject, $body, $headers, $cc, $bcc, $return_path);
+        //echo "here2";exit;
+    }
+    /**
+     * sample function to send mail
+     */
+    function sendmail() {
+        $config = Array(
+            'protocol' => 'smtp',
+            'smtp_host' => 'ssl://smtp.googlemail.com',//ssl://smtp.gmail.com
+            //'smtp_host' => 'ssl://smtp.gmail.com',
+            'smtp_port' => 465,
+            'smtp_user' => 'leo.nagaputra@gmail.com', // change it to yours
+            'smtp_pass' => 'gagahberani', // change it to yours
+            'mailtype' => 'html',
+            'charset' => 'iso-8859-1',
+            'wordwrap' => TRUE
+        );
+        
+//        $config['protocol'] = "imap";
+//        $config['imap_host'] = 'xxx.xxx.xxx.xxx';
+//        $config['imap_user'] = 'leo.nagaputra@gmail.com';
+//        $config['imap_pass'] = 'gagahberani';
+//        $config['imap_port'] = '993';
+//        $config['imap_path'] = '/imap/ssl/novalidate-cert';
+//        $config['imap_server_encoding'] = 'utf-8';
+//        $config['imap_attachemnt_dir'] = './tmp/';
+//        $config['mailtype'] = 'html';
+//        $config['newline'] = "\r\n";
+//        $config['wordwrap'] = TRUE;
+        
+        $this->load->library('email'); // load email library
+        $this->email->initialize($config);
+        $this->email->from('leo.nagaputra@gmail.com', 'SIPIRA');
+        $this->email->to('leo.naga@ojk.go.id');
+
+        $this->email->subject('Subjek email saya');
+        $this->email->message('Pesan yang saya tulis');
+
+        if ($this->email->send())
+            echo "Mail Sent!";
+        else{
+            show_error($this->email->print_debugger());
+            echo "There is error in sending mail!";
+            //print_r($this->email->print_debugger(), true);
+        }
+            //echo "There is error in sending mail!";
     }
 
 }
