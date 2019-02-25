@@ -187,7 +187,7 @@ class Perijinan extends My_Controller {
         //print_r($this->data['values']);exit; 
         //print_r($this->data['pics']);exit;
         //print_r($_POST);EXIT;
-        if (isset($_POST) && !empty($_POST)) {  //echo "here";exit;             
+        if ((isset($_POST) && !empty($_POST))|| $vstat != 0) {  //echo "here";exit;             
             //UPDATE HEADER
             $update = array(
                 "VSTAT" => $data['VSTAT'],
@@ -219,6 +219,7 @@ class Perijinan extends My_Controller {
                 "VCREA" => $data['VCREA'],
                 "DCREA" => $data['DCREA']
             );
+            //print_r($detil);exit;
             $detil_id = $this->gm->insert("dtlperijinan", $detil);
             
             $this->data['values']['VSTATS'] = $data['VSTAT'];
@@ -542,7 +543,7 @@ class Perijinan extends My_Controller {
             //'smtp_host' => 'ssl://smtp.gmail.com',
             'smtp_port' => 465,
             'smtp_user' => 'leo.nagaputra@gmail.com', // change it to yours
-            'smtp_pass' => 'gagahberani', // change it to yours
+            
             'mailtype' => 'html',
             'charset' => 'iso-8859-1',
             'wordwrap' => TRUE
