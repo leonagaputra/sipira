@@ -117,6 +117,15 @@ class Perijinan extends My_Controller {
             //print_r($data);exit;
             
             $id = $this->gm->insert("hdrperijinan", $data);
+            
+            //SELECT m.VNAMA,mi.VDESC, h.VNOSURAT, h.DTGLSURAT, h.DTGLTERIMA, h.VPERIHAL FROM `hdrperijinan` h INNER JOIN MSTIJK m on m.ID = h.ID_MSTIJK INNER JOIN MSTKATEGORIIJIN mi ON mi.ID = h.ID_MSTKATEGORIIJIN 
+            if($res = $this->ij->get_perijinan($id)){
+                //print_r($res);exit;             
+                
+                $this->sendmail($data['VPIC'], NULL, $res->VNAMA, $res->VDESC, $res->VNOSURAT, $res->DTGLSURAT, $res->DTGLTERIMA, $res->VPERIHAL);
+            }
+            
+            
             $detil = array(
                 "ID_HDRPERIJINAN" => $id,
                 "VSTAT" => $data['VSTAT'],
@@ -536,47 +545,75 @@ class Perijinan extends My_Controller {
     /**
      * sample function to send mail
      */
-    function sendmail() {
-        $config = Array(
-            'protocol' => 'smtp',
-            'smtp_host' => 'ssl://smtp.googlemail.com',//ssl://smtp.gmail.com
-            //'smtp_host' => 'ssl://smtp.gmail.com',
-            'smtp_port' => 465,
-            'smtp_user' => 'leo.nagaputra@gmail.com', // change it to yours
-            
-            'mailtype' => 'html',
-            'charset' => 'iso-8859-1',
-            'wordwrap' => TRUE
-        );
+    function sendmail($to, $msg = NULL, $bank = NULL, $kategori = NULL, $no_surat = NULL, $tgl_surat = NULL, $tgl_terima = NULL, $perihal = NULL) {
         
-//        $config['protocol'] = "imap";
-//        $config['imap_host'] = 'xxx.xxx.xxx.xxx';
-//        $config['imap_user'] = 'leo.nagaputra@gmail.com';
-//        $config['imap_pass'] = 'gagahberani';
-//        $config['imap_port'] = '993';
-//        $config['imap_path'] = '/imap/ssl/novalidate-cert';
-//        $config['imap_server_encoding'] = 'utf-8';
-//        $config['imap_attachemnt_dir'] = './tmp/';
-//        $config['mailtype'] = 'html';
-//        $config['newline'] = "\r\n";
-//        $config['wordwrap'] = TRUE;
+        //echo "1";exit;
+        //$mapJson["signature"] = 4;
+        //$szJson = json_encode($mapJson);
+        //print_r($mapJson);exit;
+        $fpHttp = curl_init();
         
-        $this->load->library('email'); // load email library
-        $this->email->initialize($config);
-        $this->email->from('leo.nagaputra@gmail.com', 'SIPIRA');
-        $this->email->to('leo.naga@ojk.go.id');
+        curl_setopt_array($fpHttp, array(
+            CURLOPT_RETURNTRANSFER => 1,
+            //CURLOPT_URL => 'http://localhost/sipira/index.php/perijinan/sendmail3',
+            CURLOPT_URL => 'http://leonagaputra.com/index.php/sipira/sendmail',
+            CURLOPT_PROXY => "inetgw-proxy:8080",
+            CURLOPT_PROXYUSERPWD => "leo.naga:L30N4g4#201901",
+            //CURLOPT_USERAGENT => 'Codular Sample cURL Request',
+            CURLOPT_POST => 1,
+            CURLOPT_POSTFIELDS => array(
+                'from' => 'no-reply@sipira.com',
+                //'from' => 'emir.nurcahyo@ojk.go.id',
+                'subject' => 'Notifikasi Perijinan',
+                //'to' => "agung.budi@ojk.go.id",
+                'to' => $to,
+                'bank' => $bank,
+                'kategori' => $kategori,
+                'no_surat' => $no_surat,
+                'tgl_surat' => $tgl_surat,
+                'tgl_terima' => $tgl_terima,
+                'perihal' => $perihal,
+                'msg' => $msg
+            )
+        ));
+        
+//        curl_setopt($fpHttp, CURLOPT_URL, "http://localhost/sipira/index.php/perijinan/sendmail3");
+//        curl_setopt($fpHttp, CURLOPT_SSL_VERIFYPEER, false);
+//        //curl_setopt($fpHttp, CURLOPT_USERAGENT, "MozillaXYZ/1.0");
+//        curl_setopt($fpHttp, CURLOPT_HTTPHEADER, array("Content-Type: application/json"));
+//        curl_setopt($fpHttp, CURLOPT_HEADER, 0);
+//        curl_setopt($fpHttp, CURLOPT_POSTFIELDS, $mapJson);
+//        curl_setopt($fpHttp, CURLOPT_RETURNTRANSFER, true);
+//        //curl_setopt($fpHttp, CURLOPT_TIMEOUT, 10);
 
-        $this->email->subject('Subjek email saya');
-        $this->email->message('Pesan yang saya tulis');
 
-        if ($this->email->send())
-            echo "Mail Sent!";
-        else{
-            show_error($this->email->print_debugger());
-            echo "There is error in sending mail!";
-            //print_r($this->email->print_debugger(), true);
-        }
-            //echo "There is error in sending mail!";
+        $jsonResult = curl_exec($fpHttp);
+        curl_close($fpHttp);
+
+        $jsnResult = json_decode($jsonResult, true);
+
+        //if ($jsnResult["status"] != "0") {
+            echo var_dump($jsnResult);
+            return;
+        //}
+    }
+    
+    function testemail(){
+        $this->sendmail("leo.nagaputra@gmail.com", "test2", "bank", "buka kp222", "111", "13/03/2019", "14/03/2019", "perihal");
+    }
+    
+    function sendmail3() {
+        $to = $this->security($this->input->post('to', TRUE));
+        $from = $this->security($this->input->post('from', TRUE));
+        $msg = $this->security($this->input->post('msg', TRUE));
+        
+        $bank = $this->security($this->input->post('bank', TRUE));
+        $kategori = $this->security($this->input->post('kategori', TRUE));
+        $no_surat = $this->security($this->input->post('no_surat', TRUE));
+        $tgl_surat = $this->security($this->input->post('tgl_surat', TRUE));
+        $perihal = $this->security($this->input->post('perihal', TRUE));
+
+        print_r($_POST);EXIT;
     }
 
 }

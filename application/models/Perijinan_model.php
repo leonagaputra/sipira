@@ -80,5 +80,24 @@ class Perijinan_model extends CI_Model {
         return FALSE;
     }
     
+    public function get_perijinan($id) {       
+        $this->db->select("m.VNAMA,mi.VDESC, h.VNOSURAT, h.DTGLSURAT, h.DTGLTERIMA, h.VPERIHAL");        
+        $this->db->from("hdrperijinan h");
+            $this->db->join('MSTIJK m', 'm.ID = h.ID_MSTIJK');    
+            $this->db->join('MSTKATEGORIIJIN mi', 'mi.ID = h.ID_MSTKATEGORIIJIN');    
+        $this->db->where("h.ID", $id);
+        
+//  
+        if($query = $this->db->get())
+        {
+            //echo $this->db->last_query();exit;
+            if($query->num_rows() > 0)
+            {                          
+                return $query->row();
+            }
+        }
+        return FALSE;
+    }
+    
     
 }
