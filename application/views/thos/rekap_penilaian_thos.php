@@ -42,8 +42,8 @@
                 <div class="form-group">
                     <label>Semester</label> 
                     <select id="ISEMESTER" class="form-control" name="ISEMESTER" <?php echo (isset($submitted) && $submitted == 1) ? "disabled" : ""; ?>>
-                      <option value="1">I</option>
-                      <option value="2" >II</option>
+                      <option value="1" <?php echo ((isset($submitted) && $submitted == 1)&& $values['ISEMESTER']==1) ? "selected" : ""; ?>>I</option>
+                      <option value="2" <?php echo ((isset($submitted) && $submitted == 1)&& $values['ISEMESTER']==2) ? "selected" : ""; ?>>II</option>
                     </select>                   
                 </div>               
                 <div class="box-footer">                  

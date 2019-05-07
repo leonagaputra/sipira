@@ -1094,7 +1094,7 @@ class Backend extends My_Controller {
         $this->data["list_thos"] = $this->pt->get_thos();
         //$this->data["dtlnilaithos"] = $this->pt->get_komponen_nilai();
         $this->data["dtlnilaithos"] = $this->pt->get_rekap_nilai_by_id($data['IYEAR'],$data['ISEMESTER'], $data['VCREA'], $data['ID_MSTTHOS']);
-        
+        //print_r($this->data["dtlnilaithos"]);exit;
         //$this->data["dtlnilaithos"] = $this->pt->get_komponen_nilai();
         $this->data["today"] = date('Y-m-d');
         $this->_get_backend_menu();

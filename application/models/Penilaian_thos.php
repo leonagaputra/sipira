@@ -55,7 +55,7 @@ class Penilaian_thos extends CI_Model {
         $this->db->where("h.IYEAR", $IYEAR);
         $this->db->where("h.ISEMESTER", $ISEMESTER);
         $this->db->where("h.VCREA", $VCREA);
-        //$this->db->order_by("h.ID_MSTGRPKOMP", "asc");
+        $this->db->order_by("m.VNAMA", "asc");
         //$this->db->where('ID NOT IN (SELECT ID_MSTTHOS FROM HDRNILAITHOS WHERE IYEAR='.$IYEAR.' AND ISEMESTER='.$ISEMESTER.' AND VCREA="'.$VCREA.'")');
         if($query = $this->db->get())
         {
@@ -77,6 +77,7 @@ class Penilaian_thos extends CI_Model {
         $this->db->group_by("h.ID_MSTTHOS, h.ISEMESTER, h.IYEAR");
         $this->db->having("h.IYEAR", $IYEAR);
         $this->db->having("h.ISEMESTER", $ISEMESTER);
+        $this->db->order_by("m.VNAMA", "asc");
         //$this->db->having("h.VCREA", $VCREA);
         //$this->db->order_by("h.ID_MSTGRPKOMP", "asc");
         //$this->db->where('ID NOT IN (SELECT ID_MSTTHOS FROM HDRNILAITHOS WHERE IYEAR='.$IYEAR.' AND ISEMESTER='.$ISEMESTER.' AND VCREA="'.$VCREA.'")');
@@ -117,16 +118,16 @@ class Penilaian_thos extends CI_Model {
     }
     
     public function get_rekap_nilai_by_id($IYEAR = FALSE, $ISEMESTER = FALSE, $VCREA = FALSE, $ID = FALSE) {       
-        $this->db->select("d.ID_HDRNILAITHOS, h.ID_MSTTHOS, m.ID, m.VDESC, g.ID as GRPID, g.VDESC as GRPVDESC, round(avg(d.DNILAI),2) as DNILAI, h.ISEMESTER, h.IYEAR, h.VCREA");     
+        $this->db->select("d.ID_HDRNILAITHOS, h.ID_MSTTHOS, m.ID, m.VDESC, g.ID as GRPID, g.VDESC as GRPVDESC, round(avg(d.DNILAI),'2') as DNILAI, h.ISEMESTER, h.IYEAR, h.VCREA");     
         $this->db->from("dtlnilaithos d");
         $this->db->join("hdrnilaithos h", "h.ID = d.ID_HDRNILAITHOS");
         $this->db->join("mstkomp m", "m.ID = d.ID_MSTKOMP");
         $this->db->join("mstgrpkomp g", "g.ID = m.ID_MSTGRPKOMP");
-        $this->db->group_by("h.id_mstthos, d.id_mstkomp");
-        $this->db->having("h.IYEAR", $IYEAR);
-        $this->db->having("h.ISEMESTER", $ISEMESTER);
-        $this->db->having("h.VCREA", $VCREA);
-        $this->db->having("h.ID_MSTTHOS", $ID);              
+        $this->db->where("h.IYEAR", $IYEAR);
+        $this->db->where("h.ISEMESTER", $ISEMESTER);
+        //$this->db->where("h.VCREA", $VCREA);
+        $this->db->where("h.ID_MSTTHOS", $ID);
+        $this->db->group_by("h.id_mstthos, d.id_mstkomp");                      
         $this->db->order_by("g.ID", "asc");
         //$this->db->order_by("h.ID_MSTGRPKOMP", "asc");
         //$this->db->where('ID NOT IN (SELECT ID_MSTTHOS FROM HDRNILAITHOS WHERE IYEAR='.$IYEAR.' AND ISEMESTER='.$ISEMESTER.' AND VCREA="'.$VCREA.'")');
