@@ -336,8 +336,8 @@ class Perijinan extends My_Controller {
                         //echo $hari;exit;
                         if($res->VSTATS == 6 || $res->VSTATS == 8 || $res->VSTATS == 7 || $res->VSTATS == 5)$res->COLOR = "bg-green";
                         else if($hari <= 0) $res->COLOR = "bg-red";
-                        else if($hari < 5)  $res->COLOR = "bg-purple";
-                        else if($hari < 10) $res->COLOR = "bg-yellow";
+                        else if($hari < 3)  $res->COLOR = "bg-purple";
+                        else if($hari < 5) $res->COLOR = "bg-yellow";
                         else $res->COLOR = "";
                     } 
                     

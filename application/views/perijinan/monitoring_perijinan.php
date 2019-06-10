@@ -194,8 +194,8 @@
                 <div class="col-md-12 ">    
                     <div style="font-weight: bold;" >KETERANGAN</div>
                         <div class="bg-green color-palette" style="margin:2px;padding:2px;"><span>Selesai/Tembusan/Eksekusi/Dikembalikan</span></div>
-                        <div class="bg-yellow color-palette" style="margin:2px;padding:2px;"><span>Kurang dari 10 Hari Kerja</span></div>
-                        <div class="bg-purple color-palette" style="margin:2px;padding:2px;"><span>Kurang dari 5 Hari Kerja</span></div>
+                        <div class="bg-yellow color-palette" style="margin:2px;padding:2px;"><span>Kurang dari 5 Hari Kerja</span></div>
+                        <div class="bg-purple color-palette" style="margin:2px;padding:2px;"><span>Kurang dari 3 Hari Kerja</span></div>
                         <div class="bg-red color-palette" style="margin:2px;padding:2px;"><span>Terlambat</span></div>
                         <br/>
                         <br/>
